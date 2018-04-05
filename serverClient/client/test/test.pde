@@ -59,7 +59,13 @@ void draw() {
     }
   }
   if(!draw){
-    println("TA MERE LA PUTE");
-    lecture();
+    if(data.equals("delai")){
+      delay(10000);
+      setup();
+      return;
+    }
+    else {
+      lecture();
+    }
   }
 }

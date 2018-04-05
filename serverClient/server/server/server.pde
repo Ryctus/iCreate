@@ -31,8 +31,7 @@ String currentReponse = currentQuestion + "r" + compteurReponse;
 String lastSend = currentQuestion;
 
 int amplitude = 0;
-int seuilSouffle = 5000000;
-int seuilTap = 2000000;
+int seuilSouffle = 3000000;
 int seuilGratte = 1000000;
 
 JavaSoundRecorder jsr = new JavaSoundRecorder();
@@ -67,7 +66,7 @@ void draw()
             currentReponse = currentQuestion + "r" + compteurReponse;
           } 
           
-          else if (amplitude >= seuilGratte && amplitude <= seuilTap){ //Je gratte = Lire une réponse
+          else if (amplitude >= seuilGratte && amplitude <= seuilSouffle){ //Je gratte = Lire une réponse
             s.write(currentReponse);
             println("Question envoyé : " + currentReponse);
             compteurReponse++;
@@ -82,9 +81,8 @@ void draw()
             }
           } 
           
-          else { // Je souffle = Pose une question
-            s.write("alabama");
-            println("Question envoyé : alabama");
+          else { // Je souffle = Répond à la question
+            s.write("delai");
             compteurQuestion = 0;
             compteurReponse = 0;
             currentQuestion = "q"+compteurQuestion;
