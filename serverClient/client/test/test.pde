@@ -49,6 +49,9 @@ void lecture(){
       delay(1);
     }
     player.pause();
+    data = "tuto";
+    draw = true;
+    redraw();
     setup(); 
 }
 
