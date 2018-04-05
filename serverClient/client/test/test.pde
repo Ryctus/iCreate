@@ -2,7 +2,6 @@ import processing.net.*;
 import ddf.minim.*;
 
 
-
 String HTTP_HEADER = "HTTP/1.0 200 OK\nContent-Type: text/html\n\n";
 String data="q0";
 
@@ -12,13 +11,19 @@ AudioPlayer player;
 Client c;
 
 PImage image;
-String url = "192.168.137.1:8080";
 
 boolean draw = true;
 
+
+int nbQuestion = 0;
+int nbReponse = 0;
+String nameReponse = "reponse/r0";
+String nameQuestion = "question/q0";
+JavaSoundRecorder jsr = new JavaSoundRecorder();
+
 void setup() {
     minim = new Minim(this);
-    c = new Client(this, "10.6.78.105", 8080);
+    c = new Client(this, "127.0.0.1", 8080);
     c.write("GET / HTTP/1.0\n");  // Use the HTTP "GET" command to ask for a webpage
     size(1920,1080);
     image = loadImage(data+".jpg");
@@ -59,8 +64,27 @@ void draw() {
     }
   }
   if(!draw){
-    if(data.equals("delai")){
-      delay(10000);
+    if(data.equals("delair")){ // enregistre une réponse
+      data = "valide";
+      jsr.captureSound(nameReponse);
+      nbReponse++;
+      nameReponse = "reponse/r" + nbReponse;
+      draw = true;
+      redraw();
+      setup();
+      return;
+    }
+    else if (data.equals("delaiq")) { //enregistre une question
+      data = "valide";
+      jsr.captureSound(nameQuestion);
+      nbQuestion++;
+      nameQuestion = "question/q" + nbQuestion;
+      draw = true;
+      redraw();
+      setup();
+      return;
+    }
+    else if(data.equals("valide")){
       setup();
       return;
     }

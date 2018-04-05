@@ -28,11 +28,10 @@ int nombreReponse = 2;
 String currentQuestion = "q" + compteurQuestion;
 String currentReponse = currentQuestion + "r" + compteurReponse;
 
-String lastSend = currentQuestion;
-
 int amplitude = 0;
 int seuilSouffle = 3000000;
-int seuilGratte = 1000000;
+int seuilToquer = 1000000;
+int seuilFrotter = 2000000;
 
 JavaSoundRecorder jsr = new JavaSoundRecorder();
 implementation amp = new implementation();
@@ -54,11 +53,12 @@ void draw()
       if (input.indexOf(HTTP_GET_REQUEST) == 0) // starts with ...
       {
           //s.write(HTTP_HEADER);  // answer that we're ok with the request and are gonna send html
+          
           println("debut capture son");
           jsr.captureSound();
           amplitude = amp.amplitude();
           
-          if(amplitude < seuilGratte){ // Question suivante
+          if(amplitude < seuilToquer){ // Question suivante
             s.write(currentQuestion);
             compteurQuestion = (compteurQuestion +1)%nombreQuestion;
             currentQuestion = "q"+compteurQuestion;
@@ -66,12 +66,11 @@ void draw()
             currentReponse = currentQuestion + "r" + compteurReponse;
           } 
           
-          else if (amplitude >= seuilGratte && amplitude <= seuilSouffle){ //Je gratte = Lire une réponse
+          else if (amplitude >= seuilToquer && amplitude < seuilFrotter) {
             s.write(currentReponse);
             println("Question envoyé : " + currentReponse);
             compteurReponse++;
             if(compteurReponse%nombreReponse==0){
-              lastSend = currentQuestion;
               compteurQuestion++;
               currentQuestion = "q"+compteurQuestion%nombreQuestion;
               currentReponse = currentQuestion + "r0";
@@ -79,10 +78,18 @@ void draw()
             else{
               currentReponse = currentQuestion + "r" + compteurReponse%nombreReponse;
             }
+          }
+          
+          else if (amplitude >= seuilFrotter && amplitude < seuilSouffle){ //Je frotter = Envoyer une réponse
+            s.write("delair");
+            compteurQuestion = 0;
+            compteurReponse = 0;
+            currentQuestion = "q"+compteurQuestion;
+            currentReponse = currentQuestion + "r" + 0;
           } 
           
           else { // Je souffle = Répond à la question
-            s.write("delai");
+            s.write("delaiq");
             compteurQuestion = 0;
             compteurReponse = 0;
             currentQuestion = "q"+compteurQuestion;
